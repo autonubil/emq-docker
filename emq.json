@@ -1,0 +1,472 @@
+{
+  "volumes": null,
+  "id": "/emq",
+  "cmd": null,
+  "args": null,
+  "user": null,
+  "env": {
+    "EMQ_LOG_LEVEL": "debug"
+  },
+  "instances": 2,
+  "cpus": 1,
+  "mem": 1024,
+  "disk": 1024,
+  "gpus": 0,
+  "executor": null,
+  "constraints": [
+    [
+      "hostname",
+      "UNIQUE"
+    ]
+  ],
+  "fetch": null,
+  "storeUrls": null,
+  "backoffSeconds": 1,
+  "backoffFactor": 1.15,
+  "maxLaunchDelaySeconds": 3600,
+  "container": {
+    "docker": {
+      "image": "czeumer/emq-docker:latest",
+      "forcePullImage": true,
+      "privileged": false,
+      "network": "HOST"
+    }
+  },
+  "healthChecks": null,
+  "readinessChecks": null,
+  "dependencies": null,
+  "upgradeStrategy": {
+    "minimumHealthCapacity": 1,
+    "maximumOverCapacity": 1
+  },
+  "labels": null,
+  "acceptedResourceRoles": [
+    "slave_public"
+  ],
+  "residency": null,
+  "secrets": null,
+  "taskKillGracePeriodSeconds": null,
+  "portDefinitions": [
+    {
+      "protocol": "tcp",
+      "port": 18083
+    },
+    {
+      "protocol": "tcp",
+      "port": 1883
+    },
+    {
+      "protocol": "tcp",
+      "port": 8083
+    },
+    {
+      "protocol": "tcp",
+      "port": 4369
+    },
+    {
+      "protocol": "tcp",
+      "port": 6000
+    },
+    {
+      "protocol": "tcp",
+      "port": 6001
+    },
+    {
+      "protocol": "tcp",
+      "port": 6002
+    },
+    {
+      "protocol": "tcp",
+      "port": 6003
+    },
+    {
+      "protocol": "tcp",
+      "port": 6004
+    },
+    {
+      "protocol": "tcp",
+      "port": 6005
+    },
+    {
+      "protocol": "tcp",
+      "port": 6006
+    },
+    {
+      "protocol": "tcp",
+      "port": 6007
+    },
+    {
+      "protocol": "tcp",
+      "port": 6008
+    },
+    {
+      "protocol": "tcp",
+      "port": 6009
+    },
+    {
+      "protocol": "tcp",
+      "port": 6010
+    },
+    {
+      "protocol": "tcp",
+      "port": 6011
+    },
+    {
+      "protocol": "tcp",
+      "port": 6012
+    },
+    {
+      "protocol": "tcp",
+      "port": 6013
+    },
+    {
+      "protocol": "tcp",
+      "port": 6014
+    },
+    {
+      "protocol": "tcp",
+      "port": 6015
+    },
+    {
+      "protocol": "tcp",
+      "port": 6016
+    },
+    {
+      "protocol": "tcp",
+      "port": 6017
+    },
+    {
+      "protocol": "tcp",
+      "port": 6018
+    },
+    {
+      "protocol": "tcp",
+      "port": 6019
+    },
+    {
+      "protocol": "tcp",
+      "port": 6020
+    },
+    {
+      "protocol": "tcp",
+      "port": 6021
+    },
+    {
+      "protocol": "tcp",
+      "port": 6022
+    },
+    {
+      "protocol": "tcp",
+      "port": 6023
+    },
+    {
+      "protocol": "tcp",
+      "port": 6024
+    },
+    {
+      "protocol": "tcp",
+      "port": 6025
+    },
+    {
+      "protocol": "tcp",
+      "port": 6026
+    },
+    {
+      "protocol": "tcp",
+      "port": 6027
+    },
+    {
+      "protocol": "tcp",
+      "port": 6028
+    },
+    {
+      "protocol": "tcp",
+      "port": 6029
+    },
+    {
+      "protocol": "tcp",
+      "port": 6030
+    },
+    {
+      "protocol": "tcp",
+      "port": 6031
+    },
+    {
+      "protocol": "tcp",
+      "port": 6032
+    },
+    {
+      "protocol": "tcp",
+      "port": 6033
+    },
+    {
+      "protocol": "tcp",
+      "port": 6034
+    },
+    {
+      "protocol": "tcp",
+      "port": 6035
+    },
+    {
+      "protocol": "tcp",
+      "port": 6036
+    },
+    {
+      "protocol": "tcp",
+      "port": 6037
+    },
+    {
+      "protocol": "tcp",
+      "port": 6038
+    },
+    {
+      "protocol": "tcp",
+      "port": 6039
+    },
+    {
+      "protocol": "tcp",
+      "port": 6040
+    },
+    {
+      "protocol": "tcp",
+      "port": 6041
+    },
+    {
+      "protocol": "tcp",
+      "port": 6042
+    },
+    {
+      "protocol": "tcp",
+      "port": 6043
+    },
+    {
+      "protocol": "tcp",
+      "port": 6044
+    },
+    {
+      "protocol": "tcp",
+      "port": 6045
+    },
+    {
+      "protocol": "tcp",
+      "port": 6046
+    },
+    {
+      "protocol": "tcp",
+      "port": 6047
+    },
+    {
+      "protocol": "tcp",
+      "port": 6048
+    },
+    {
+      "protocol": "tcp",
+      "port": 6049
+    },
+    {
+      "protocol": "tcp",
+      "port": 6050
+    },
+    {
+      "protocol": "tcp",
+      "port": 6051
+    },
+    {
+      "protocol": "tcp",
+      "port": 6052
+    },
+    {
+      "protocol": "tcp",
+      "port": 6053
+    },
+    {
+      "protocol": "tcp",
+      "port": 6054
+    },
+    {
+      "protocol": "tcp",
+      "port": 6055
+    },
+    {
+      "protocol": "tcp",
+      "port": 6056
+    },
+    {
+      "protocol": "tcp",
+      "port": 6057
+    },
+    {
+      "protocol": "tcp",
+      "port": 6058
+    },
+    {
+      "protocol": "tcp",
+      "port": 6059
+    },
+    {
+      "protocol": "tcp",
+      "port": 6060
+    },
+    {
+      "protocol": "tcp",
+      "port": 6061
+    },
+    {
+      "protocol": "tcp",
+      "port": 6062
+    },
+    {
+      "protocol": "tcp",
+      "port": 6063
+    },
+    {
+      "protocol": "tcp",
+      "port": 6064
+    },
+    {
+      "protocol": "tcp",
+      "port": 6065
+    },
+    {
+      "protocol": "tcp",
+      "port": 6066
+    },
+    {
+      "protocol": "tcp",
+      "port": 6067
+    },
+    {
+      "protocol": "tcp",
+      "port": 6068
+    },
+    {
+      "protocol": "tcp",
+      "port": 6069
+    },
+    {
+      "protocol": "tcp",
+      "port": 6070
+    },
+    {
+      "protocol": "tcp",
+      "port": 6071
+    },
+    {
+      "protocol": "tcp",
+      "port": 6072
+    },
+    {
+      "protocol": "tcp",
+      "port": 6073
+    },
+    {
+      "protocol": "tcp",
+      "port": 6074
+    },
+    {
+      "protocol": "tcp",
+      "port": 6075
+    },
+    {
+      "protocol": "tcp",
+      "port": 6076
+    },
+    {
+      "protocol": "tcp",
+      "port": 6077
+    },
+    {
+      "protocol": "tcp",
+      "port": 6078
+    },
+    {
+      "protocol": "tcp",
+      "port": 6079
+    },
+    {
+      "protocol": "tcp",
+      "port": 6080
+    },
+    {
+      "protocol": "tcp",
+      "port": 6081
+    },
+    {
+      "protocol": "tcp",
+      "port": 6082
+    },
+    {
+      "protocol": "tcp",
+      "port": 6083
+    },
+    {
+      "protocol": "tcp",
+      "port": 6084
+    },
+    {
+      "protocol": "tcp",
+      "port": 6085
+    },
+    {
+      "protocol": "tcp",
+      "port": 6086
+    },
+    {
+      "protocol": "tcp",
+      "port": 6087
+    },
+    {
+      "protocol": "tcp",
+      "port": 6088
+    },
+    {
+      "protocol": "tcp",
+      "port": 6089
+    },
+    {
+      "protocol": "tcp",
+      "port": 6090
+    },
+    {
+      "protocol": "tcp",
+      "port": 6091
+    },
+    {
+      "protocol": "tcp",
+      "port": 6092
+    },
+    {
+      "protocol": "tcp",
+      "port": 6093
+    },
+    {
+      "protocol": "tcp",
+      "port": 6094
+    },
+    {
+      "protocol": "tcp",
+      "port": 6095
+    },
+    {
+      "protocol": "tcp",
+      "port": 6096
+    },
+    {
+      "protocol": "tcp",
+      "port": 6097
+    },
+    {
+      "protocol": "tcp",
+      "port": 6098
+    },
+    {
+      "protocol": "tcp",
+      "port": 6099
+    },
+    {
+      "protocol": "tcp",
+      "port": 6100
+    }
+  ],
+  "requirePorts": true
+}

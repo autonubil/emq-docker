@@ -7,21 +7,29 @@
 
 if [ x"${EMQ_NAME}" = x ]
 then
-EMQ_NAME=$(hostname)
+EMQ_NAME=$(hostname -s)
 echo "EMQ_NAME=${EMQ_NAME}"
 fi
 
 if [ x"${EMQ_HOST}" = x ]
 then
-EMQ_HOST=$(cat /etc/hosts | grep $(hostname) | awk '{print $1}')
+EMQ_HOST=$(cat /etc/hosts | grep $(hostname) | awk '{print $1}' | head -n 1)
 echo "EMQ_HOST=${EMQ_HOST}"
 fi
 
 if [ x"${EMQ_NODE_NAME}" = x ]
 then
+
+if [ x"${MESOS_TASK_ID}" = x ]
+then
 EMQ_NODE_NAME="${EMQ_NAME}@${EMQ_HOST}"
+else
+EMQ_NODE_NAME="${MESOS_TASK_ID//./-}@${EMQ_HOST}"
+fi
 echo "EMQ_NODE_NAME=${EMQ_NODE_NAME}"
 fi
+
+
 sed -i -e "s/^#*\s*node.name\s*=\s*.*@.*/node.name = ${EMQ_NODE_NAME}/g" /opt/emqttd/etc/emq.conf
 
 if [ x"${EMQ_NODE_COOKIE}" = x ]
@@ -158,6 +166,18 @@ echo "EMQ_MAX_PACKET_SIZE=${EMQ_MAX_PACKET_SIZE}"
 fi
 sed -i -e "s/^#*\s*mqtt.max_packet_size\s*=\s*.*/mqtt.max_packet_size = ${EMQ_MAX_PACKET_SIZE}/g" /opt/emqttd/etc/emq.conf
 
+
+
+
+if [ x"${EMQ_DIST_LISTEN_MAX}" = x ]
+then
+EMQ_DIST_LISTEN_MAX="6100"
+echo "EMQ_DIST_LISTEN_MAX=${EMQ_DIST_LISTEN_MAX}"
+fi
+sed -i -e "s/^#*\s*node.dist_listen_max\s*=\s*.*/node.dist_listen_max = ${EMQ_DIST_LISTEN_MAX}/g" /opt/emqttd/etc/emq.conf
+
+
+
 ## EMQ Plugin load settings
 # Plugins loaded by default
 
@@ -169,6 +189,10 @@ fi
 # First, remove special char at header
 # Next, replace special char to ".\n" to fit emq loaded_plugins format
 echo $(echo "${EMQ_LOADED_PLUGINS}."|sed -e "s/^[^A-Za-z0-9_]\{1,\}//g"|sed -e "s/[^A-Za-z0-9_]\{1,\}/\.\n/g") > /opt/emqttd/data/loaded_plugins
+
+echo
+echo "Effective config:"
+grep -v -E "^#*$" /opt/emqttd/etc/emq.conf | grep -v -E "^$"
 
 ## EMQ Plugins setting
 
@@ -189,7 +213,8 @@ do
     if [ ${WAIT_TIME} -gt 5 ]
     then
         echo '['$(date -u +"%Y-%m-%dT%H:%M:%SZ")']:timeout error'
-        exit 1
+        tail $(ls /opt/emqttd/log/*)
+	exit 1
     fi
 done
 

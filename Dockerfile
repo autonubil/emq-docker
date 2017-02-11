@@ -1,10 +1,10 @@
 FROM alpine:3.4
 
-MAINTAINER Huang Rui <vowstar@gmail.com>
+#MAINTAINER Huang Rui <vowstar@gmail.com>
+MAINTAINER Carsten Zeumer <carsten.zeumer@autonubil.com>
 
 ENV EMQ_VERSION=v2.0.7
 
-ADD ./start.sh /start.sh
 
 RUN apk --no-cache add \
         ncurses-terminfo-base \
@@ -69,8 +69,12 @@ RUN apk --no-cache add \
         perl \
     && git clone -b ${EMQ_VERSION} https://github.com/emqtt/emq-relx.git /emqttd \
     && cd /emqttd \
-    && make \
-    && mkdir /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
+    && make 
+    
+ADD ./start.sh /start.sh
+
+
+RUN  mkdir /opt && mv /emqttd/_rel/emqttd /opt/emqttd \
     && cd / && rm -rf /emqttd \
     && mv /start.sh /opt/emqttd/start.sh \
     && chmod +x /opt/emqttd/start.sh \
@@ -132,6 +136,7 @@ RUN apk --no-cache add \
         make \
         perl \
     && rm -rf /var/cache/apk/*
+
 
 WORKDIR /opt/emqttd
 
