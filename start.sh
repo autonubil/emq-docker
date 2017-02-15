@@ -20,16 +20,14 @@ fi
 if [ x"${EMQ_NODE_NAME}" = x ]
 then
 
-if [ x"${MESOS_TASK_ID}" = x ]
-then
+#if [ x"${MESOS_TASK_ID}" = x ]
+#then
 EMQ_NODE_NAME="${EMQ_NAME}@${EMQ_HOST}"
-else
-EMQ_NODE_NAME="${MESOS_TASK_ID//./-}@${EMQ_HOST}"
-fi
+#else
+# EMQ_NODE_NAME="${MESOS_TASK_ID//./-}@${EMQ_HOST}"
+#fi
 echo "EMQ_NODE_NAME=${EMQ_NODE_NAME}"
 fi
-
-
 sed -i -e "s/^#*\s*node.name\s*=\s*.*@.*/node.name = ${EMQ_NODE_NAME}/g" /opt/emqttd/etc/emq.conf
 
 if [ x"${EMQ_NODE_COOKIE}" = x ]
@@ -97,24 +95,27 @@ sed -i -e "s/^#*\s*mqtt.listener.tcp.max_clients\s*=\s*.*/mqtt.listener.tcp.max_
 
 if [ x"${EMQ_SSL_PORT}" = x ]
 then
-EMQ_SSL_PORT=8883
+#disable ssl if no port is given
+echo "** Disable SSL listener"
+sed -e "s/^\s*mqtt.listener.ssl/## mqtt.listener.ssl/g" /opt/emqttd/etc/emq.conf
+else
 echo "EMQ_SSL_PORT=${EMQ_SSL_PORT}"
-fi
-sed -i -e "s/^#*\s*mqtt.listener.ssl\s*=\s*.*/mqtt.listener.ssl = ${EMQ_SSL_PORT}/g" /opt/emqttd/etc/emq.conf
+  sed -i -e "s/^#*\s*mqtt.listener.ssl\s*=\s*.*/mqtt.listener.ssl = ${EMQ_SSL_PORT}/g" /opt/emqttd/etc/emq.conf
 
-if [ x"${EMQ_SSL_ACCEPTORS}" = x ]
-then
-EMQ_SSL_ACCEPTORS=32
-echo "EMQ_SSL_ACCEPTORS=${EMQ_SSL_ACCEPTORS}"
-fi
-sed -i -e "s/^#*\s*mqtt.listener.ssl.acceptors\s*=\s*.*/mqtt.listener.ssl.acceptors = ${EMQ_SSL_ACCEPTORS}/g" /opt/emqttd/etc/emq.conf
+  if [ x"${EMQ_SSL_ACCEPTORS}" = x ]
+  then
+  EMQ_SSL_ACCEPTORS=32
+  echo "EMQ_SSL_ACCEPTORS=${EMQ_SSL_ACCEPTORS}"
+  fi
+  sed -i -e "s/^#*\s*mqtt.listener.ssl.acceptors\s*=\s*.*/mqtt.listener.ssl.acceptors = ${EMQ_SSL_ACCEPTORS}/g" /opt/emqttd/etc/emq.conf
 
-if [ x"${EMQ_SSL_MAX_CLIENTS}" = x ]
-then
-EMQ_SSL_MAX_CLIENTS=500000
-echo "EMQ_SSL_MAX_CLIENTS=${EMQ_SSL_MAX_CLIENTS}"
+  if [ x"${EMQ_SSL_MAX_CLIENTS}" = x ]
+  then
+  EMQ_SSL_MAX_CLIENTS=500000
+  echo "EMQ_SSL_MAX_CLIENTS=${EMQ_SSL_MAX_CLIENTS}"
+  fi
+  sed -i -e "s/^#*\s*mqtt.listener.ssl.max_clients\s*=\s*.*/mqtt.listener.ssl.max_clients = ${EMQ_SSL_MAX_CLIENTS}/g" /opt/emqttd/etc/emq.conf
 fi
-sed -i -e "s/^#*\s*mqtt.listener.ssl.max_clients\s*=\s*.*/mqtt.listener.ssl.max_clients = ${EMQ_SSL_MAX_CLIENTS}/g" /opt/emqttd/etc/emq.conf
 
 if [ x"${EMQ_HTTP_PORT}" = x ]
 then
@@ -139,24 +140,26 @@ sed -i -e "s/^#*\s*mqtt.listener.http.max_clients\s*=\s*.*/mqtt.listener.http.ma
 
 if [ x"${EMQ_HTTPS_PORT}" = x ]
 then
-EMQ_HTTPS_PORT=8084
-echo "EMQ_HTTPS_PORT=${EMQ_HTTPS_PORT}"
-fi
+# remove https support if no port is given
+echo "** Disable HTTPS listener"
+sed -e "s/^\s*mqtt.listener.https/## mqtt.listener.https/g" /opt/emqttd/etc/emq.conf
+else
 sed -i -e "s/^#*\s*mqtt.listener.https\s*=\s*.*/mqtt.listener.https = ${EMQ_HTTPS_PORT}/g" /opt/emqttd/etc/emq.conf
+echo "EMQ_HTTPS_PORT=${EMQ_HTTPS_PORT}"
+ if [ x"${EMQ_HTTPS_ACCEPTORS}" = x ]
+ then
+ EMQ_HTTPS_ACCEPTORS=32
+ echo "EMQ_HTTPS_ACCEPTORS=${EMQ_HTTPS_ACCEPTORS}"
+ fi
+ sed -i -e "s/^#*\s*mqtt.listener.https.acceptors\s*=\s*.*/mqtt.listener.https.acceptors = ${EMQ_HTTPS_ACCEPTORS}/g" /opt/emqttd/etc/emq.conf
 
-if [ x"${EMQ_HTTPS_ACCEPTORS}" = x ]
-then
-EMQ_HTTPS_ACCEPTORS=32
-echo "EMQ_HTTPS_ACCEPTORS=${EMQ_HTTPS_ACCEPTORS}"
+ if [ x"${EMQ_HTTPS_MAX_CLIENTS}" = x ]
+ then
+ EMQ_HTTPS_MAX_CLIENTS=1000000
+ echo "EMQ_HTTPS_MAX_CLIENTS=${EMQ_HTTPS_MAX_CLIENTS}"
+ fi
+ sed -i -e "s/^#*\s*mqtt.listener.https.max_clients\s*=\s*.*/mqtt.listener.https.max_clients = ${EMQ_HTTPS_MAX_CLIENTS}/g" /opt/emqttd/etc/emq.conf
 fi
-sed -i -e "s/^#*\s*mqtt.listener.https.acceptors\s*=\s*.*/mqtt.listener.https.acceptors = ${EMQ_HTTPS_ACCEPTORS}/g" /opt/emqttd/etc/emq.conf
-
-if [ x"${EMQ_HTTPS_MAX_CLIENTS}" = x ]
-then
-EMQ_HTTPS_MAX_CLIENTS=1000000
-echo "EMQ_HTTPS_MAX_CLIENTS=${EMQ_HTTPS_MAX_CLIENTS}"
-fi
-sed -i -e "s/^#*\s*mqtt.listener.https.max_clients\s*=\s*.*/mqtt.listener.https.max_clients = ${EMQ_HTTPS_MAX_CLIENTS}/g" /opt/emqttd/etc/emq.conf
 
 
 if [ x"${EMQ_MAX_PACKET_SIZE}" = x ]
@@ -190,9 +193,22 @@ fi
 # Next, replace special char to ".\n" to fit emq loaded_plugins format
 echo $(echo "${EMQ_LOADED_PLUGINS}."|sed -e "s/^[^A-Za-z0-9_]\{1,\}//g"|sed -e "s/[^A-Za-z0-9_]\{1,\}/\.\n/g") > /opt/emqttd/data/loaded_plugins
 
+
+if [ x"${EMQ_DASHBOARD_HTTP_PORT}" = x ]
+then
+EMQ_DASHBOARD_HTTP_PORT=9083
+echo "EMQ_DASHBOARD_HTTP_PORT=${EMQ_DASHBOARD_HTTP_PORT}"
+fi
+sed -i -e "s/^#*\s*dashboard.listener.http\s*=\s*.*/dashboard.listener.http = ${EMQ_DASHBOARD_HTTP_PORT}/g" /opt/emqttd/etc/plugins/emq_dashboard.conf
+
+
+
 echo
 echo "Effective config:"
 grep -v -E "^#*$" /opt/emqttd/etc/emq.conf | grep -v -E "^$"
+
+grep -v -E "^#*$" /opt/emqttd/etc/plugins/emq_dashboard.conf | grep -v -E "^$"
+
 
 ## EMQ Plugins setting
 
